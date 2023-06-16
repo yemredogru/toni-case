@@ -1,15 +1,28 @@
 const express = require('express');
+
+//db connection
 const connectDB = require('./helpers/connectDb')
-const authRouter = require('./routes/user/authRoute')
-const cors = require('cors')
+
+//routers
+const userRouter = require('./routes/userRoute')
+const postRouter = require('./routes/postRoute')
+
 const app = express()
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+
+//cors settings
+const cors = require('cors')
 app.use(cors({
     origin: "*",
     credentials: true,
 }));
-app.use('/auth',authRouter)
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+
+
+app.use('/user',userRouter)
+app.use('/post',postRouter)
 
 connectDB()
 app.listen(3001,()=>{

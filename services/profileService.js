@@ -1,4 +1,5 @@
 const postModel = require('../models/postModel')
+const userModel = require('../models/userModel')
 
 class Post {
     constructor(id=null,user_id=null) {
@@ -8,7 +9,7 @@ class Post {
     async getPostById(){
         return new Promise(async(resolve,reject)=>{
             try{
-                var post = postModel.findOne(this.id);
+                var post = await postModel.findOne(this.id);
                 if(!post){
                     reject("Post not found!")
                 }
@@ -25,7 +26,15 @@ class Post {
     async getPostsByUserId(){
         return new Promise(async(resolve,reject)=>{
             try{
-                
+                var user = await userModel.findOne({id:this.user_id})
+                if(!user)
+                {
+                    reject("User not found!")
+                }
+                else{
+                    var posts = await postModel.find({user:this.user_id})
+                    resolve(posts)
+                }
             }
             catch(err){
                 reject(err)
