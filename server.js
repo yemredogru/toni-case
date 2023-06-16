@@ -1,5 +1,5 @@
 const express = require('express');
-const connectDB = require('./helpers/db/connectDb')
+const connectDB = require('./helpers/connectDb')
 const authRouter = require('./routes/user/authRoute')
 const cors = require('cors')
 const app = express()
