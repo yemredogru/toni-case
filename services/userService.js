@@ -1,17 +1,33 @@
+const userModel = require('../models/userModel')
+
 class User {
-    constructor(name, email, password) {
+    constructor(name=null, email=null, password=null,id=null) {
       this.name = name;
       this.email = email;
       this.password = password;
+      this.id = id;
     }
     async createUser(){
-        await userModel.create({name,email,password})
+        return new Promise(async(resolve,reject)=>{
+          await userModel.create({name,email,password})
         .then(() => {
-            res.status(200).json({status:true})
+            resolve(true)
           })
           .catch(err => {
-            res.status(400).send(err)
+            reject(err)
           });
+        })
+    }
+    async findById(){
+      return new Promise(async(resolve,reject)=>{
+        const user_exist = await userModel.findOne({id:this.id}).select(['-password','-refresh_token'])
+        if(!user_exist){
+          reject("User Not Found")
+        }
+        else{
+          resolve(user_exist)
+        }
+      })
     }
 }
 
