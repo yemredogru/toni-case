@@ -2,6 +2,7 @@ const userService = require('../../services/userService');
 const authService = require('../../services/authService');
 const userModel = require('../../models/userModel')
 const UploadS3 = require('../../helpers/customUpload')
+const Sns = require('../../helpers/subscribeSns')
 
 
 
@@ -23,6 +24,7 @@ const Register = async(req,res,next)=>{
                     else{
                         user.profile_picture = response.Location;
                         await user.save()
+                        await Sns.SubscribeSns(email)
                         res.status(201).json({message:"User created successfully"})
                     }
                 }

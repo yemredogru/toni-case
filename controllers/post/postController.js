@@ -1,6 +1,8 @@
 const profileService = require('../../services/profileService');
 const postModel = require('../../models/postModel')
+const userModel = require('../../models/userModel')
 const UploadS3 = require('../../helpers/customUpload')
+const Sns = require('../../helpers/subscribeSns')
 
 const PostById = async(req,res,next)=>{
     try{
@@ -44,6 +46,7 @@ const getPostsByUserId = async(req,res,next)=>{
 const newPost = async(req,res,next)=>{
     try{
         const post = new profileService.Post(id=null,user_id=req.user.user.id)
+        const user_information = await userModel.findOne({_id:req.user.user.id})
         post.addPost(req.body)
         .then(data=>{
             if(req.files){
@@ -58,6 +61,7 @@ const newPost = async(req,res,next)=>{
                         else{
                             post.image = response.Location;
                             await post.save()
+                            Sns.PublishSns(user_information.firstName,user_information.lastName,req.body.description,response.Location)
                             res.status(201).json({message:"Post Created Successfully!"})
                         }
                     }
@@ -71,6 +75,7 @@ const newPost = async(req,res,next)=>{
                 })
             }
             else{
+                Sns.PublishSns(user_information.firstName,user_information.lastName,req.body.description)
                 res.status(200).json({message:"User created successfully"})
             }
         })

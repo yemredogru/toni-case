@@ -1,6 +1,7 @@
 const postModel = require('../models/postModel')
 const userModel = require('../models/userModel')
 
+
 class Post {
     constructor(id=null,user_id=null) {
       this.id = id;
@@ -66,6 +67,7 @@ class Post {
             }
         })
     }
+    
     
     
 }
