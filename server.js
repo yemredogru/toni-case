@@ -1,5 +1,6 @@
 const express = require('express');
-
+const listEndpoints = require('express-list-endpoints')
+const fileUpload = require('express-fileupload')
 //db connection
 const connectDB = require('./helpers/connectDb')
 
@@ -19,7 +20,7 @@ app.use(cors({
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-
+app.use(fileUpload())
 
 app.use('/user',userRouter)
 app.use('/post',postRouter)
