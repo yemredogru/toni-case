@@ -1,18 +1,53 @@
 const userService = require('../../services/userService');
 const authService = require('../../services/authService');
 const userModel = require('../../models/userModel')
+const UploadS3 = require('../../helpers/customUpload')
+
 
 
 const Register = async(req,res,next)=>{
-    const {name,email,password } = req.body;
-    const new_user = new userService.User(name,email,password)
+    const {firstName,lastName,phone_number,email,password } = req.body;
+    if(firstName != undefined && lastName != undefined &&phone_number != undefined && email!= undefined && password!= undefined)
+    {
+        const new_user = new userService.User(firstName,lastName,phone_number,email,password)
     new_user.createUser()
     .then(data=>{
-        res.status(201).json({status:false})
+        if(req.files){
+            UploadS3.uploadAws(req.files)
+            .then(async(response)=>{
+                try{
+                    var user = await userModel.findOne({_id:data._id})
+                    if(!user){
+                        res.status(400).json({message:"User Not Found!"})
+                    }
+                    else{
+                        user.profile_picture = response.Location;
+                        await user.save()
+                        res.status(201).json({message:"User created successfully"})
+                    }
+                }
+                catch(err){
+                    res.status(500).json({err:err})
+                }
+            })
+            .catch(err=>{
+                console.log(err)
+                res.status(404).json({err:err})
+            })
+        }
+        else{
+            res.status(200).json({message:"User created successfully"})
+        }
+        
+        
     })
     .catch(err=>{
-        res.status(404).json({status:false})
+        res.status(404).json({err:err})
     })
+    }
+    else{
+        res.status(404).json({err:"All fields are required"})
+    }
 }
 const Login =async(req,res,next)=>{
         try {
@@ -48,7 +83,7 @@ const UserById = async(req,res,next)=>{
 }
 const AllUsers = async(req,res,next)=>{
     try{
-        const users = userModel.find()
+        const users = await userModel.find().select('-password')
         res.status(200).json(users)
     }
     catch(err){
