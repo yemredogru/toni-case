@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const userModel = require('../models/userModel')
 
 
 class Auth {
@@ -9,7 +11,7 @@ class Auth {
     async Login() {
         return new Promise(async (resolve, reject) => {
             try{
-                const user = await userModel.findOne({ email })
+                const user = await userModel.findOne({ email:this.email })
                 if (!user) {
                     reject("User Does Not exist!")
                 }
