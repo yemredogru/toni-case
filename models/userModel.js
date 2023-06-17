@@ -5,8 +5,12 @@ var validateEmail = function(email) {
     return re.test(email)
 };
 const schema = mongoose.Schema({
-    firstName:String,
-    lastName:String,
+    firstName:{
+        type:String
+    },
+    lastName:{
+        type:String
+    },
     phone_number:{
         type:String,
         unique:true
@@ -25,14 +29,18 @@ const schema = mongoose.Schema({
         post_id:{
             type:mongoose.Schema.Types.ObjectId,
             ref:'Post'
-        }
+        },
+        default:[]
     }
     ,
     refresh_token:{
         type:String,
-        unique:true
+
     },
     password:{
+        type:String
+    },
+    profile_picture:{
         type:String
     }
     
@@ -44,7 +52,7 @@ schema.pre('save', function(next) {
     if (!user.isModified('password')) return next();
 
     // generate a salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    bcrypt.genSalt(10, function(err, salt) {
         if (err) return next(err);
 
         // hash the password using our new salt
