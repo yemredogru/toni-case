@@ -92,5 +92,52 @@ const AllUsers = async(req,res,next)=>{
         res.status(500).json({message:err})
     }
 }
+const sendRequest = async(req,res,next)=>{
+    try{
+        const service = new userService.User()
+        service.friendRequest(req.user.user.id,req.params.id)
+        .then(data=>{
+            
+            res.status(200).json(data)
+        })
+        .catch(err=>{
+            res.status(500).json({message:err})
+        })
+    }
+    catch(err){
+        res.status(500).json({message:err})
+    }
+}
+const AcceptRequest = async(req,res,next)=>{
+    try{
+        const service = new userService.User()
+        service.acceptRequest(req.user.user.id,req.params.id)
+        .then(data=>{
+            res.status(200).json(data)
+        })
+        .catch(err=>{
+            console.log(err)
+            res.status(500).json({message:err})
+        })
+    }
+    catch(err){
+        res.status(500).json({message:err})
+    }
+}
+const RejectRequest = async(req,res,next)=>{
+    try{
+        const service = new userService.User()
+        service.rejectRequest(req.user.user.id,req.params.id)
+        .then(data=>{
+            res.status(200).json(data)
+        })
+        .catch(err=>{
+            res.status(500).json({message:err})
+        })
+    }
+    catch(err){
+        res.status(500).json({message:err})
+    }
+}
 
-module.exports={Register,Login,UserById,AllUsers}
+module.exports={Register,Login,UserById,AllUsers,sendRequest,AcceptRequest,RejectRequest}

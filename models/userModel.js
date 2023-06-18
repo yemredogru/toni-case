@@ -42,6 +42,22 @@ const schema = mongoose.Schema({
     },
     profile_picture:{
         type:String
+    },
+    friends:{
+        type:Array,
+        friend_id:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        },
+        default:[]
+    },
+    pending_requests:{
+        type:Array,
+        request_user_id:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        },
+        default:[]
     }
     
 })

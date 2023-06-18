@@ -1,4 +1,4 @@
-const profileService = require('../../services/profileService');
+const postService = require('../../services/postService');
 const postModel = require('../../models/postModel')
 const userModel = require('../../models/userModel')
 const UploadS3 = require('../../helpers/customUpload')
@@ -6,7 +6,7 @@ const Sns = require('../../helpers/subscribeSns')
 
 const PostById = async(req,res,next)=>{
     try{
-        const post = new profileService.Post(id=req.params.id)
+        const post = new postService.Post(id=req.params.id)
         post.getPostById()
         .then(data=>{
             res.status(200).json(data)
@@ -30,7 +30,7 @@ const AllPosts = async(req,res,next)=>{
 }
 const getPostsByUserId = async(req,res,next)=>{
     try{
-        const post = new profileService.Post(id=null,user_id=req.params.id)
+        const post = new postService.Post(id=null,user_id=req.params.id)
         post.getPostsByUserId()
         .then(data=>{
             res.status(200).json(data)
@@ -45,7 +45,7 @@ const getPostsByUserId = async(req,res,next)=>{
 }
 const newPost = async(req,res,next)=>{
     try{
-        const post = new profileService.Post(id=null,user_id=req.user.user.id)
+        const post = new postService.Post(id=null,user_id=req.user.user.id)
         const user_information = await userModel.findOne({_id:req.user.user.id})
         post.addPost(req.body)
         .then(data=>{
