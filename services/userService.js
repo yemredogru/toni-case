@@ -32,7 +32,8 @@ class User {
     async findById(){
       return new Promise(async(resolve,reject)=>{
         try{
-          const user_exist = await userModel.findOne({id:this.id}).select(['-password','-refresh_token'])
+          console.log(this)
+          const user_exist = await userModel.findOne({_id:this.id}).select(['-password','-refresh_token'])
         if(!user_exist){
           reject("User Not Found")
         }
@@ -57,6 +58,7 @@ class User {
             
             user.pending_requests.push({request_user_id:user_id})
             await user.save()
+            
             resolve(user)
           }
         }

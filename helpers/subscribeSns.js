@@ -3,6 +3,18 @@ const sns = new AWS.SNS({region:'eu-north-1',credentials:{
     accessKeyId: process.env.ACCESS_KEY,
     secretAccessKey: process.env.SECRET_KEY
 }});
+// const CreateSns=async(id,firstName,lastName)=>{
+//   const params = {
+//     Name: id
+//   };
+//   sns.createTopic(params, (err, data) => {
+//     if (err) {
+//       console.error(err);
+//       return;
+//     }
+//     console.log(data);
+//   });
+// }
 const SubscribeSns=async(email)=>{
     const params = {
         TopicArn: 'arn:aws:sns:eu-north-1:432555270420:test',

@@ -59,7 +59,6 @@ const schema = mongoose.Schema({
         },
         default:[]
     }
-    
 })
 schema.pre('save', function(next) {
     var user = this;

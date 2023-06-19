@@ -38,7 +38,7 @@ const Register = async(req,res,next)=>{
             })
         }
         else{
-            res.status(200).json({message:"User created successfully"})
+            res.status(201).json({message:"User created successfully"})
         }
         
         
@@ -70,7 +70,7 @@ const Login =async(req,res,next)=>{
 }
 const UserById = async(req,res,next)=>{
     try{
-        const user = new userService.User(id=req.params.id)
+        const user = new userService.User(firstName=null,lastName=null,phone_number=null, email=null,password=null,id=req.params.id)
         user.findById()
         .then(data=>{
             res.status(200).json(data)
